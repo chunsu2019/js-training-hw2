@@ -83,6 +83,7 @@ const second = [
 ];
 
 const mergeArr = (arr1, arr2) => {
+  //merge objects with the same id
   const mergedArray = arr1.map((obj) => {
     return {
       ...obj,
@@ -90,12 +91,14 @@ const mergeArr = (arr1, arr2) => {
     };
   });
 
+  //add object from arr2, exclude objects with existing id
   mergedArray.push(
     ...arr2.filter((obj) => {
       return !arr1.find((item) => item.uuid === obj.uuid);
     })
   );
 
+  //
   for (const obj of mergedArray) {
     obj.name = obj.name ?? null;
     obj.role = obj.role ?? null;
