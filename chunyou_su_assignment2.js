@@ -41,18 +41,12 @@ for (const item of itemsObject) {
 //#3
 //reduce
 const total = (arr) => {
-  return arr.reduce((acc, curr) => {
-    return acc + curr;
-  }, 0);
-};
-
-//for of
-const total2 = (arr) => {
   let sum = 0;
 
-  for (const ele of arr) {
-    sum += ele;
-  }
+  arr.forEach((element) => {
+    const { quantity, price } = element;
+    sum += quantity * price;
+  });
 
   return sum;
 };
@@ -83,30 +77,21 @@ const second = [
 ];
 
 const mergeArr = (arr1, arr2) => {
-  //merge objects with the same id
-  const mergedArray = arr1.map((obj) => {
-    return {
-      ...obj,
-      ...arr2.find((item) => item.uuid === obj.uuid),
-    };
+  const map = {};
+
+  [...arr1, ...arr2].forEach((ele) => {
+    if (!map[ele.uuid]) {
+      map[ele.uuid] = {
+        uuid: ele.uuid,
+        name: ele.name ?? null,
+        role: ele.role ?? null,
+      };
+    } else {
+      map[ele.uuid] = { ...map[ele.uuid], ...ele };
+    }
   });
 
-  //add object from arr2, exclude objects with existing id
-  mergedArray.push(
-    ...arr2.filter((obj) => {
-      return !arr1.find((item) => item.uuid === obj.uuid);
-    })
-  );
-
-  //
-  for (const obj of mergedArray) {
-    obj.name = obj.name ?? null;
-    obj.role = obj.role ?? null;
-  }
-
-  mergedArray.sort((a, b) => a.uuid - b.uuid);
-
-  return mergedArray;
+  return Object.values(map);
 };
 
 //
@@ -117,7 +102,7 @@ console.log("\n\n#2 Filter");
 console.log(newArray3);
 
 console.log("\n\n#3 Total value");
-console.log(`total of [1, 2, 3 4] = ${total([1, 2, 3, 4])}`);
+console.log(total(itemsObject));
 
 console.log("\n\n#4 String to lowercase + remove extra spaces");
 console.log(editString(string));
